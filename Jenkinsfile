@@ -15,7 +15,8 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git "https://github.com/yogeshnavle/Terraform-Jenkins.git"
+                            // Specified 'main' branch explicitly to avoid the 'master' error
+                            git branch: 'main', url: "https://github.com/yogeshnavle/Terraform-Jenkins.git"
                         }
                     }
                 }
