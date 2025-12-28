@@ -1,0 +1,48 @@
+Jenkins Installation on AWS EC2 (Ubuntu)This project provides a step-by-step guide to deploying a persistent Jenkins CI/CD server on an Amazon EC2 instance running Ubuntu.
+📋 PrerequisitesAn 
+AWS Account.
+An EC2 Instance (Recommended: t3.small or larger with 2GB+ RAM).
+MobaXterm or SSH client installed.A Key Pair (.pem file) for SSH access.
+
+🛡️ Step 1: Security Group Configuration
+Before connecting, ensure your EC2 Security Group has the following Inbound Rules:
+Protocol   Port   Source    Description
+SSH,       22     My IP     Secure terminal access
+TCP,       8080   0.0.0.0/0  Jenkins Web Interface
+
+
+🚀 Step 2: Installation Script.
+Connect to your instance via SSH (Username: ubuntu) and execute the following commands:
+1. Update System & Install Java
+sudo apt update && sudo apt upgrade -y
+sudo apt install fontconfig openjdk-17-jre -y
+
+2. Add Jenkins Repository
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/" | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+3.Install and Start Jenkins
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+
+🔑 Step 3: Unlock Jenkins
+1.Open your browser and navigate to http://<YOUR-EC2-PUBLIC-IP>:8080.
+2.To retrieve the initial administrator password, run:
+Bash
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+3.Copy the output and paste it into the Jenkins "Unlock" screen.
+4.Select "Install Suggested Plugins" and create your admin user.
+
+
+📂 Troubleshooting & Paths
+Check Status: sudo systemctl status jenkins
+Restart Jenkins: sudo systemctl restart jenkins
+View Logs: sudo tail -f /var/log/jenkins/jenkins.log
+Home Directory: /var/lib/jenkins
