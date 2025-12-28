@@ -24,9 +24,12 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh 'pwd;cd terraform/ ; terraform init'
-                sh "pwd;cd terraform/ ; terraform plan -out tfplan"
-                sh 'pwd;cd terraform/ ; terraform show -no-color tfplan > tfplan.txt'
+            dir("terraform") {
+            // No need to 'cd' anymore because of the dir block
+            sh 'terraform init'
+            sh 'terraform plan -out tfplan'
+            sh 'terraform show -no-color tfplan > tfplan.txt'
+            }
             }
         }
         stage('Approval') {
